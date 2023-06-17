@@ -8,7 +8,7 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 class Mysticrune : JavaPlugin() {
-    var configManager : ConfigManager? = null
+    private var configManager : ConfigManager? = null
 
     override fun onEnable() {
         logger.log(Level.INFO, "test")
@@ -27,5 +27,8 @@ class Mysticrune : JavaPlugin() {
         configManager?.saveConfig("config")
         configManager?.saveConfig("message/Locale_EN")
         configManager?.saveConfig("message/Locale_PL")
+    }
+    fun getConfigManager(): ConfigManager? {
+        return configManager
     }
 }

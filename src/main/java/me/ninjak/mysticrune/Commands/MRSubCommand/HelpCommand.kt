@@ -10,7 +10,7 @@ class HelpCommand {
     @CommandHandler(name = "mysticrune")
     fun helpCommand(sender: CommandSender, args: Array<String>) {
         val player = sender as Player
-        val configManager = Mysticrune().configManager
+        val configManager = Mysticrune().getConfigManager()
         val config = configManager?.getConfig("config")
         val locale = config?.getString("config.Language")
         val languageConfig = configManager?.getConfig("message/Locale_$locale")

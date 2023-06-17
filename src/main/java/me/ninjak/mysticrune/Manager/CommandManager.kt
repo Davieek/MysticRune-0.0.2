@@ -1,19 +1,15 @@
 package me.ninjak.mysticrune.Manager
 
+import me.ninjak.mysticrune.Commands.MysticRuneCommand
 import me.ninjak.mysticrune.Manager.Handlers.CommandHandler
 import me.ninjak.mysticrune.Mysticrune
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
-import java.awt.Label
 import java.lang.reflect.Method
 
-class CommandManager(private val plugin : Mysticrune) : CommandExecutor {
-    private val commandMap: MutableMap<String, Method>
-
-    init {
-        commandMap = HashMap()
-    }
+class CommandManager(private val plugin: Mysticrune) : CommandExecutor {
+    private val commandMap: MutableMap<String, Method> = HashMap()
 
     fun registerCommands(vararg commandInstances: Any) {
         for (commandInstance in commandInstances) {
@@ -23,7 +19,12 @@ class CommandManager(private val plugin : Mysticrune) : CommandExecutor {
                     val annotation = method.getAnnotation(CommandHandler::class.java)
                     val commandName = annotation.name
                     commandMap[commandName] = method
-                    plugin.getCommand(commandName)!!.setExecutor(this)
+
+                    if (commandInstance is MysticRuneCommand) {
+                        commandInstance.setMysticrune(plugin)
+                    }
+
+                    plugin.getCommand(commandName)?.setExecutor(this)
                 }
             }
         }
@@ -34,7 +35,7 @@ class CommandManager(private val plugin : Mysticrune) : CommandExecutor {
         val method = commandMap[commandName]
         if (method != null) {
             try {
-                method.invoke(method.declaringClass.newInstance(), sender, args)
+                method.invoke(method.declaringClass.getDeclaredConstructor().newInstance(), sender, args)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
