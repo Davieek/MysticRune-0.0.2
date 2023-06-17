@@ -3,3 +3,5 @@ version: '${project.version}'
 main: me.ninjak.mysticrune.Mysticrune
 api-version: 1.19
 authors: [_Ninjak]
+commands:
+  mysticrune:
